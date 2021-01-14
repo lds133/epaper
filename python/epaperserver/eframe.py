@@ -6,9 +6,11 @@ import epd7in5b_sock as epd7in5b
 
 from PIL import Image,ImageDraw,ImageFont
 
+from openweathermap import WeatherInfo,OpenWeatherMap
 from eframe_base     import EFramePlugin
-from eframe_calendar import EFrameCalendar
-from eframe_weather  import EFrameWeather
+from eframe_calendar4 import EFrameCalendar
+from eframe_weather2  import EFrameWeather,EFrameClock
+from eframe_temperature import EFrameTemperature
 
 
 
@@ -25,14 +27,22 @@ def MakeEFramePicture(epaperserverip="127.0.0.1"):
     #epd.Clear(0xFF)
     #epd.sleep()
 
+    w = OpenWeatherMap("/var/ram")
+    w.FromAuto()
+
+
 
     plugins = [ ( EFrameCalendar(), 0 , 0   ), 
-                ( EFrameWeather(),  0 , 570 ),
+                ( EFrameTemperature(w), 0 , 250   ), 
+                ( EFrameWeather(w),  0 , 565 ),
+                ( EFrameClock(),  366,5),#366, 640),
               ]
 
 
-
-
+    #HBlackImage = Image.open('..\pic\cat.bmp')
+    #HBlackImage = Image.open('..\pic\kettle.bmp')
+    #HBlackImage = Image.open('..\pic\jun1_1979_black.bmp')
+    #HRedImage = Image.open('..\pic\jun1_1979_red.bmp')
 
 
     HBlackImage = Image.new('1', ( epd7in5b.EPD_HEIGHT,epd7in5b.EPD_WIDTH), 255)  
@@ -59,4 +69,5 @@ def MakeEFramePicture(epaperserverip="127.0.0.1"):
 
 
 if __name__ == "__main__":
+    #MakeEFramePicture("192.168.0.30")
     MakeEFramePicture()

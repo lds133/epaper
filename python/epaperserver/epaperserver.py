@@ -2,7 +2,7 @@
 import threading
 import time
 import os,sys
-from PyQt4 import QtGui,QtCore
+from PyQt5 import QtGui,QtCore,QtWidgets
 from PIL import Image,ImageDraw,ImageFont
 from PIL.ImageQt import ImageQt
 
@@ -14,7 +14,7 @@ import socket
 
 
 
-class MyWidget(QtGui.QWidget  ):
+class MyWidget(QtWidgets.QWidget  ):
 
 
 # 00 00 00 00 : size (not included this 4 bytes)
@@ -38,17 +38,17 @@ class MyWidget(QtGui.QWidget  ):
     STATE_DATA    =   3
 
     def __init__(self, parent=None,isvertical=True,isturnover=True):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         
         self.isvertical = isvertical
         self.isturnover = isturnover
         
-        self.pic = QtGui.QLabel()
-        vbox = QtGui.QVBoxLayout()
+        self.pic = QtWidgets.QLabel()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.pic)
         vbox.addStretch()
         self.setLayout(vbox)
-        app.connect(self, QtCore.SIGNAL("ShowImage()"), self.ShowImage)
+        #app.connect(self, QtCore.SIGNAL("ShowImage()"), self.ShowImage) QT4
 
         palettedata = [ 0, 0, 0,    0, 0, 255,   0, 0, 255,    240, 240, 240,    255, 0, 0,    0, 0, 255,   0, 0, 255,    0, 0, 255]
         self.image = Image.new("P", (self.EPD_WIDTH, self.EPD_HEIGHT),0x03)
@@ -185,7 +185,8 @@ class MyWidget(QtGui.QWidget  ):
         
 
     def ShowImageSafe(self):
-        self.emit(QtCore.SIGNAL('ShowImage()'))
+        #self.emit(QtCore.SIGNAL('ShowImage()'))  QT4
+        self.ShowImage()
 
     def ShowImage(self):
         qim = ImageQt(self.image)
@@ -233,7 +234,7 @@ def thread_function(name):
 
             b = bytearray(n)
             for i in range(n):
-                b[i] = ord(data[i])
+                b[i] = data[i]
 
             window.ProcessBytes(b)
             window.ShowImageSafe()
@@ -258,7 +259,7 @@ def thread_function(name):
 
 if __name__ == "__main__":
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = MyWidget()
     window.show()
     

@@ -1,6 +1,6 @@
 #!/bin/sh
-cd /overlay/mosquitto/epaper/epaperserver
-python eframe_update_hw.py
+cd /hsh/epaper/epaperserver
+python3 eframe_update_hw.py
 
 
 
